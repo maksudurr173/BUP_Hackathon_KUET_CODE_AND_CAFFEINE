@@ -197,8 +197,19 @@ def create_app() -> FastAPI:
             "safe_mode": safe_mode_manager.get_status()
         }
 
+    # ==========================================================================
+    # Frontend Static Files
+    # ==========================================================================
+    import os
+    frontend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "frontend")
+    if os.path.exists(frontend_dir):
+        from fastapi.staticfiles import StaticFiles
+        app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
+
     return app
+
 
 
 # Root ASGI application
 app = create_app()
+
